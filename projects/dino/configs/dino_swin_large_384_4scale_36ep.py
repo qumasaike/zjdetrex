@@ -8,7 +8,7 @@ lr_multiplier = get_config("common/coco_schedule.py").lr_multiplier_36ep
 train = get_config("common/train.py").train
 
 # modify training config
-train.init_checkpoint = "/path/to/swin_large_patch4_window12_384_22kto1k.pth"
+train.init_checkpoint = "./dino_swin_large_384_5scale_36ep.pth"
 train.output_dir = "./output/dino_swin_large_384_4scale_36ep"
 
 # max training iterations
