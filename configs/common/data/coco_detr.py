@@ -55,6 +55,8 @@ dataloader.test = L(build_detection_test_loader)(
             L(T.ResizeShortestEdge)(
                 short_edge_length=800,
                 max_size=1333,
+                # short_edge_length=864,
+                # max_size=1536,
             ),
         ],
         augmentation_with_crop=None,

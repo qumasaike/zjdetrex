@@ -14,40 +14,46 @@ from sklearn.model_selection import train_test_split
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--root_dir', default='datasets/nuimages_nuscenes',type=str, help="root path of images and labels, include ./images and ./labels and classes.txt")
+parser.add_argument('--root_dir', default='datasets/bevheight/',type=str, help="root path of images and labels, include ./images and ./labels and classes.txt")
 parser.add_argument('--save_path', type=str,default='train.json', help="if not split the dataset, give a path to a json file")
 parser.add_argument('--random_split', action='store_true', help="random split the dataset, default ratio is 8:1:1")
 parser.add_argument('--split_by_file', action='store_true', help="define how to split the dataset, include ./train.txt ./val.txt ./test.txt ")
 
 arg = parser.parse_args()
 
+# class_names = {
+# 'REGULAR_VEHICLE' : 0,
+# 'PEDESTRIAN' : 1,
+# 'BICYCLIST' : 2,
+# 'MOTORCYCLIST' : 3,
+# 'WHEELED_RIDER' : 4,
+# 'BOLLARD' : 5,
+# 'CONSTRUCTION_CONE' : 6,
+# 'SIGN' : 7,
+# 'CONSTRUCTION_BARREL' : 8,
+# 'STOP_SIGN' : 9,
+# 'MOBILE_PEDESTRIAN_CROSSING_SIGN' : 10,
+# 'LARGE_VEHICLE' : 11,
+# 'BUS' : 12,
+# 'BOX_TRUCK' : 13,
+# 'TRUCK' : 14,
+# 'VEHICULAR_TRAILER' : 15,
+# 'TRUCK_CAB' : 16,
+# 'SCHOOL_BUS' : 17,
+# 'ARTICULATED_BUS' : 18,
+# 'MESSAGE_BOARD_TRAILER' : 19,
+# 'BICYCLE' : 20,
+# 'MOTORCYCLE' : 21,
+# 'WHEELED_DEVICE' : 22,
+# 'WHEELCHAIR' : 23,
+# 'STROLLER' : 24,
+# 'DOG' : 25,
+# }
+
 class_names = {
-'REGULAR_VEHICLE' : 0,
-'PEDESTRIAN' : 1,
-'BICYCLIST' : 2,
-'MOTORCYCLIST' : 3,
-'WHEELED_RIDER' : 4,
-'BOLLARD' : 5,
-'CONSTRUCTION_CONE' : 6,
-'SIGN' : 7,
-'CONSTRUCTION_BARREL' : 8,
-'STOP_SIGN' : 9,
-'MOBILE_PEDESTRIAN_CROSSING_SIGN' : 10,
-'LARGE_VEHICLE' : 11,
-'BUS' : 12,
-'BOX_TRUCK' : 13,
-'TRUCK' : 14,
-'VEHICULAR_TRAILER' : 15,
-'TRUCK_CAB' : 16,
-'SCHOOL_BUS' : 17,
-'ARTICULATED_BUS' : 18,
-'MESSAGE_BOARD_TRAILER' : 19,
-'BICYCLE' : 20,
-'MOTORCYCLE' : 21,
-'WHEELED_DEVICE' : 22,
-'WHEELCHAIR' : 23,
-'STROLLER' : 24,
-'DOG' : 25,
+'1' : 0,
+'2' : 1,
+'3' : 2,
 }
 
 def train_test_val_split_random(img_paths,ratio_train=0.8,ratio_test=0.1,ratio_val=0.1):
@@ -142,23 +148,23 @@ def yolo2coco(arg):
             labelList = fr.readlines()
             for label in labelList:
                 label = label.strip().split()
-                x = float(label[1])
-                y = float(label[2])
-                w = float(label[3])
-                h = float(label[4])
+                x1 = float(label[0])
+                y1 = float(label[1])
+                x2 = float(label[2])
+                y2 = float(label[3])
 
                 # convert x,y,w,h to x1,y1,x2,y2
                 H, W, _ = im.shape
-                x1 = (x - w / 2) * W
-                y1 = (y - h / 2) * H
-                x2 = (x + w / 2) * W
-                y2 = (y + h / 2) * H
+                # x1 = (x - w / 2) * W
+                # y1 = (y - h / 2) * H
+                # x2 = (x + w / 2) * W
+                # y2 = (y + h / 2) * H
                 # 标签序号从0开始计算, coco2017数据集标号混乱，不管它了。
-                cls_id = int(label[0])
-                # if label[0] not in class_names.keys():
-                #     print(label[0])
-                #     continue
-                # cls_id = class_names[label[0]]   
+                cls_id = label[4]
+                if cls_id not in class_names.keys():
+                    print(label[0])
+                    continue
+                cls_id = class_names[cls_id]   
                 width = max(0, x2 - x1)
                 height = max(0, y2 - y1)
                 dataset['annotations'].append({

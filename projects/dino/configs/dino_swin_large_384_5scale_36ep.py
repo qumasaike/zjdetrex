@@ -24,3 +24,4 @@ model.transformer.num_feature_levels = 5
 
 # modify training config
 train.output_dir = "./output/dino_swin_large_384_5scale_36ep"
+# train.init_checkpoint = "./dino_swin_large_384_5scale_36ep.pth"

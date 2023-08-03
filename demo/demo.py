@@ -33,7 +33,7 @@ def get_parser():
     parser = argparse.ArgumentParser(description="detrex demo for visualizing customized inputs")
     parser.add_argument(
         "--config-file",
-        default="projects/dino/configs/dino_r50_4scale_12ep.py",
+        default="projects/dino/configs/dino_r50_5scale_36ep.py",
         metavar="FILE",
         help="path to config file",
     )
@@ -77,7 +77,7 @@ def get_parser():
     parser.add_argument(
         "--confidence-threshold",
         type=float,
-        default=0.5,
+        default=0.2,
         help="Minimum score for instance predictions to be shown",
     )
     parser.add_argument(
